@@ -75,7 +75,11 @@ export function CreateLinkForm() {
 			<div className="space-y-4">
 				<div className="group space-y-2">
 					<Label
-						className="group-focus-within:text-blue-base group-focus-within:font-semibold"
+						className={
+							errors.originalUrl
+								? "font-semibold text-danger"
+								: "group-focus-within:text-blue-base group-focus-within:font-semibold"
+						}
 						htmlFor="original-url"
 					>
 						Link original
@@ -95,7 +99,11 @@ export function CreateLinkForm() {
 
 				<div className="group space-y-2">
 					<Label
-						className="group-focus-within:text-blue-base group-focus-within:font-semibold"
+						className={
+							errors.shortenedUrl
+								? "font-semibold text-danger"
+								: "group-focus-within:text-blue-base group-focus-within:font-semibold"
+						}
 						htmlFor="shortened-url"
 					>
 						Link encurtado
