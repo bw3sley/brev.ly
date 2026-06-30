@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Open Sans", sans-serif;
+  --font-components: "Martian Mono", monospace;
+
+  --color-blue-base: var(--blue-base);
+  --color-blue-dark: var(--blue-base-dark);
+  --color-danger: var(--danger);
+  --color-white: var(--white);
+
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+}
+
+:root {
+	--blue-base: #2c46b1;
+	--blue-base-dark: #2c4091;
+	--danger: #b12c4d;
+	--white: #ffffff;
+
+	--gray-200: #e4e6ec;
+	--gray-300: #cdcfd5;
+	--gray-400: #74798b;
+	--gray-500: #4d505c;
+	--gray-600: #1f2025;
+}
+
+@layer base {
+	html {
+		@apply font-sans;
+	}
+}
+
+@keyframes links-loading-scan {
+	0% {
+		transform: translateX(-140%);
+	}
+
+	100% {
+		transform: translateX(320%);
+	}
+}
+
+@layer components {
+	.links-loading-indicator {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 2px;
+		width: 100%;
+		background: var(--gray-100);
+		border-radius: 8px 8px 0 0;
+		overflow: hidden;
+	}
+
+	.links-loading-indicator::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 35%;
+		border-radius: 999px;
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			var(--blue-base) 30%,
+			var(--blue-base-dark) 70%,
+			transparent 100%
+		);
+		animation: links-loading-scan 0.5s ease-in-out infinite;
+	}
+}

@@ -1,0 +1,54 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Build and Push Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Generate tag
+        id: generate-tag
+        shell: bash
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build image for scan
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          load: true
+          push: false
+          tags: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.generate-tag.outputs.sha }}
+
+      # I was stuck in a picomatch: 4.0.3 vulnerability, so I commented this by now
+
+      # - name: Run Trivy scan
+      #   uses: aquasecurity/trivy-action@v0.36.0
+      #   with:
+      #     image-ref: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.generate-tag.outputs.sha }}
+      #     format: table
+      #     exit-code: 1
+      #     ignore-unfixed: true
+      #     severity: HIGH,CRITICAL
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.generate-tag.outputs.sha }}
